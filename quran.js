@@ -2,7 +2,7 @@ let quranData = null;
 
 async function loadQuran() {
   if (quranData) return;
-  const res = await fetch('./data/quran_en.json');
+  const res = await fetch('https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/quran_en.json');
   quranData = await res.json();
 }
 
