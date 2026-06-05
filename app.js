@@ -47,11 +47,17 @@
     }
   }
 
-  function renderText(text) {
-    return text
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/\n/g, '<br>');
+  function formatText(text) {
+    // convert **bold**
+    text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // convert *italic*
+    text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    // convert Ayat references: (Surah, X:Y) "text" into styled quote blocks
+    text = text.replace(/\(([^)]+)\)\s*[""]([^"""]+)["""]/g,
+      '<span class="ayat-quote">($1) &ldquo;$2&rdquo;</span>');
+    // wrap double newlines as paragraph breaks
+    text = text.split(/\n\n+/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+    return text;
   }
 
   function appendMessage(role, text) {
@@ -59,7 +65,7 @@
     msg.className = `msg ${role}`;
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
-    bubble.innerHTML = renderText(text);
+    bubble.innerHTML = formatText(text);
     msg.appendChild(bubble);
     chatWindow.appendChild(msg);
     chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -71,7 +77,7 @@
     msg.className = 'msg ai';
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
-    bubble.innerHTML = renderText(text);
+    bubble.innerHTML = formatText(text);
     msg.appendChild(bubble);
     chatWindow.appendChild(msg);
     chatWindow.scrollTop = chatWindow.scrollHeight;
