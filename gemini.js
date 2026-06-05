@@ -1,4 +1,4 @@
-async function askGemini(question) {
+async function askGemini(question, ayats, apiKey) {
   const res = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -6,7 +6,7 @@ async function askGemini(question) {
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
+    const err = await res.json();
     throw new Error(err.error || 'API error');
   }
 
