@@ -38,8 +38,8 @@ body {
   flex-direction: column;
   gap: 1rem;
 }
-.setup-logo { font-size: 3rem; }
-.setup-card h1 { font-size: 1.8rem; color: var(--accent); }
+.setup-logo { font-size: 6rem; }
+.setup-card h1 { font-size: 4rem; color: var(--accent); }
 .setup-card p { color: var(--muted); font-size: 0.95rem; }
 .setup-card input {
   width: 100%;
