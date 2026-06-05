@@ -11,7 +11,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-r1:free',
+        model: 'nvidia/llama-3.3-nemotron-super-49b-v1:free',
         messages: [{ role: 'user', content: buildPrompt(question) }],
         max_tokens: 800,
         temperature: 0.4
