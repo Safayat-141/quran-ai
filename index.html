@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quran AI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- SETUP SCREEN (shown if no API key) -->
+  <div id="setup-screen" class="screen hidden">
+    <div class="setup-card">
+      <div class="setup-logo">☪</div>
+      <h1>Quran AI</h1>
+      <p>Daily guidance grounded in the Holy Quran</p>
+      <input type="password" id="api-key-input" placeholder="Enter your Gemini API key" />
+      <button id="save-key-btn">Begin →</button>
+      <a href="https://aistudio.google.com/app/apikey" target="_blank">Get a free API key</a>
+    </div>
+  </div>
+
+  <!-- MAIN CHAT SCREEN -->
+  <div id="chat-screen" class="screen hidden">
+    <header>
+      <span class="logo">☪ Quran AI</span>
+      <button id="reset-key-btn" title="Change API key">⚙</button>
+    </header>
+
+    <div id="chat-window">
+      <div class="welcome-msg">
+        <p>Assalamu Alaikum. Ask me anything about life, decisions, or guidance — I will answer only from the Holy Quran.</p>
+      </div>
+    </div>
+
+    <div id="input-area">
+      <textarea id="user-input" placeholder="Ask your question..." rows="1"></textarea>
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+
+  <script src="quran.js"></script>
+  <script src="gemini.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
