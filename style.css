@@ -22,7 +22,13 @@ body {
   justify-content: center;
 }
 
-.screen { width: 100%; }
+.screen { 
+  width: 100%; 
+  max-width: 760px; /* Aligns maximum boundary for both screens */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers content vertically */
+}
 .hidden { display: none !important; }
 
 /* ── SETUP ── */
@@ -70,9 +76,12 @@ body {
 #chat-screen {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-width: 760px;
+  height: 85vh; /* Changed from 100vh to let it float centered on the screen */
+  width: 100%;
   margin: 0 auto;
+  background: var(--surface); /* Optional: containing background */
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 
 header {
