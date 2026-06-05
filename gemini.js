@@ -28,7 +28,7 @@ Instructions:
       'Authorization': `Bearer ${API_KEY}`
     },
     body: JSON.stringify({
-      model: 'nvidia/llama-3.1-nemotron-nano-8b-instruct:free',
+      model: 'openrouter/auto',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 600,
       temperature: 0.4
