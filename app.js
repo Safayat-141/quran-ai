@@ -115,19 +115,19 @@
     msg.appendChild(bubble);
 
     if (ayats.length > 0) {
-      const sources = document.createElement('div');
-      sources.className = 'sources';
+  const ayatList = document.createElement('div');
+  ayatList.style.cssText = 'margin-top:1rem; display:flex; flex-direction:column; gap:0.75rem;';
 
-      ayats.forEach(a => {
-        const tag = document.createElement('button');
-        tag.className = 'source-tag';
-        tag.textContent = `${a.surahName} ${a.surah}:${a.ayat}`;
-        tag.addEventListener('click', () => toggleTafsir(tag, a, msg));
-        sources.appendChild(tag);
-      });
+  ayats.forEach(a => {
+    const ayatCard = document.createElement('div');
+    ayatCard.style.cssText = 'border-left: 3px solid #c9a84c; padding: 0.5rem 0.75rem; font-size:0.85rem; color:#c9a84c; cursor:pointer;';
+    ayatCard.innerHTML = `<span style="font-weight:bold">${a.surahName} ${a.surah}:${a.ayat}</span><br><span style="color:#e6edf3; font-style:italic;">"${a.text}"</span>`;
+    ayatCard.addEventListener('click', () => toggleTafsir(ayatCard, a, msg));
+    ayatList.appendChild(ayatCard);
+  });
 
-      msg.appendChild(sources);
-    }
+  msg.appendChild(ayatList);
+}
 
     chatWindow.appendChild(msg);
     chatWindow.scrollTop = chatWindow.scrollHeight;
