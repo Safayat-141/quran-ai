@@ -3,27 +3,35 @@ export default async function handler(req, res) {
 
   const { question } = req.body;
 
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`
-    },
-    body: JSON.stringify({
-      model: 'mistralai/mistral-7b-instruct:free',
-      messages: [{ role: 'user', content: buildPrompt(question) }],
-      max_tokens: 800,
-      temperature: 0.4
-    })
-  });
+  try {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'deepseek/deepseek-r1:free',
+        messages: [{ role: 'user', content: buildPrompt(question) }],
+        max_tokens: 800,
+        temperature: 0.4
+      })
+    });
 
-  const data = await response.json();
-  if (!response.ok || !data.choices) {
-  console.error('OpenRouter error:', JSON.stringify(data));
-  return res.status(500).json({ error: data.error?.message || 'OpenRouter error' });
-}
-  const answer = data.choices?.[0]?.message?.content || 'No response received.';
-  res.status(200).json({ answer });
+    const data = await response.json();
+
+    if (!response.ok || !data.choices) {
+      console.error('OpenRouter error:', JSON.stringify(data));
+      return res.status(500).json({ error: data.error?.message || 'OpenRouter error' });
+    }
+
+    const answer = data.choices[0].message.content || 'No response received.';
+    res.status(200).json({ answer });
+
+  } catch (err) {
+    console.error('Server error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
 }
 
 function buildPrompt(question) {
