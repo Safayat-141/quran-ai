@@ -4,14 +4,14 @@ export default async function handler(req, res) {
   const { question } = req.body;
 
   try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'openrouter/auto',
+        model: 'llama-3.3-70b-versatile',
         messages: [{ role: 'user', content: buildPrompt(question) }],
         max_tokens: 800,
         temperature: 0.4
@@ -21,8 +21,8 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok || !data.choices) {
-      console.error('OpenRouter error:', JSON.stringify(data));
-      return res.status(500).json({ error: data.error?.message || 'OpenRouter error' });
+      console.error('Groq error:', JSON.stringify(data));
+      return res.status(500).json({ error: data.error?.message || 'Groq error' });
     }
 
     const answer = data.choices[0].message.content || 'No response received.';
