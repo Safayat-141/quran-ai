@@ -77,7 +77,7 @@ ${ayats}
 Your task:
 1. Read each Ayat carefully and understand what Allah is saying
 2. Connect the meaning of the Ayats to the person's specific situation
-3. Start with 2-3 sentences of your own understanding and context about the topic — no Ayats yet
+3. Start with 1-2 sentences of your own understanding and context about the topic — no Ayats yet
 4. Derive a clear, practical conclusion in an explained form that is grounded in these Ayats
 5. Your conclusion should flow from the Ayats and its Tafsir
 
@@ -88,6 +88,6 @@ Instructions for your response:
 - Quote the relevant Ayats directly in your answer in this format: (Surah Name, Chapter:Verse) "verse text here"
 - Use tafsir in the internet to ensure the context of the Ayat and the Question are same
 - Be practical and relevant to the person's real life situation
-- Keep the answer between 7-9 sentences
+- Keep the answer between 10-12 sentences
 - End with an encouraging closing thought`;
 }
