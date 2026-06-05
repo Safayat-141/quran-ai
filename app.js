@@ -92,7 +92,10 @@
     msg.className = `msg ${role}`;
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
-    bubble.textContent = text;
+    bubble.innerHTML = text
+  .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  .replace(/\*(.+?)\*/g, '<em>$1</em>')
+  .replace(/\n/g, '<br>');
     msg.appendChild(bubble);
     chatWindow.appendChild(msg);
     chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -105,7 +108,10 @@
 
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
-    bubble.textContent = text;
+    bubble.innerHTML = text
+  .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  .replace(/\*(.+?)\*/g, '<em>$1</em>')
+  .replace(/\n/g, '<br>');
     msg.appendChild(bubble);
 
     if (ayats.length > 0) {
