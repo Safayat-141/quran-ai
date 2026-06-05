@@ -1,5 +1,6 @@
+const API_KEY = "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";
+
 async function askGemini(question, ayats, apiKey) {
-  apiKey = "AQ.Ab8RN6JwNUiIcwA9ROew1CiHfJVMR9aWv82CmneoZwDVOZLE_Q";
   const ayatContext = ayats.map(a =>
     `[${a.surahName} ${a.surah}:${a.ayat}] "${a.text}"`
   ).join('\n\n');
@@ -19,28 +20,27 @@ Instructions:
 - If the retrieved Ayats do not clearly address the question, say so honestly.
 - Keep the answer between 3–6 sentences.`;
 
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey
-      },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.4, maxOutputTokens: 600 }
-      })
-    }
-  );
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${API_KEY}`
+    },
+    body: JSON.stringify({
+      model: 'google/gemini-2.0-flash-001',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 600,
+      temperature: 0.4
+    })
+  });
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.error?.message || 'Gemini API error');
+    throw new Error(err.error?.message || 'API error');
   }
 
   const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
+  return data.choices?.[0]?.message?.content || 'No response received.';
 }
 
 async function fetchTafsir(surah, ayat) {
@@ -51,10 +51,7 @@ async function fetchTafsir(surah, ayat) {
     const data = await res.json();
     if (data.code !== 200) return null;
     const [arabic, tafsir] = data.data;
-    return {
-      arabic: arabic.text,
-      english: tafsir.text
-    };
+    return { arabic: arabic.text, english: tafsir.text };
   } catch {
     return null;
   }
