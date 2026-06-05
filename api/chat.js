@@ -78,7 +78,7 @@ Your task:
 1. Read each Ayat carefully and understand what Allah is saying
 2. Connect the meaning of the Ayats to the person's specific situation
 3. Derive a clear, practical conclusion in an explained form that is grounded in these Ayats
-4. Do not add opinions or outside knowledge — your conclusion must flow directly from the Ayats and its Tafsir
+4. Your conclusion should flow from the Ayats and its Tafsir
 
 Instructions for your response:
 - Find the most relevant Quranic verses that address this question
