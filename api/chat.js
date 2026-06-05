@@ -53,14 +53,17 @@ export default async function handler(req, res) {
 }
 
 function retrievalPrompt(question) {
-  return `You are a Quranic scholar. Your only task is to find and list the most relevant Ayats from the Quran that relate to this question:
+  return `You are a Quranic scholar. Find the most relevant Ayats from the Quran for this question:
 
 "${question}"
 
-List 4-6 Ayats in this exact format:
-(Surah Name, Chapter:Verse) "exact verse text"
+You MUST list 4-6 Ayats in this EXACT format and no other format:
+(Surah Name, Chapter:Verse) "exact verse text here"
 
-Only list the Ayats. No explanation yet. Be precise — only include Ayats whose meaning directly relates to the question.`;
+Example:
+(Al-Baqarah, 2:286) "Allah does not burden a soul beyond that it can bear."
+
+Only list Ayats in that exact format. Nothing else.`;
 }
 
 function reasoningPrompt(question, ayats) {
@@ -81,6 +84,7 @@ Instructions for your response:
 - If someone greets with "Assalamu alaikum", reply with "Wa alaikum assalam!" first
 - Answer softly and factually, no exaggerated greetings like "My dear brother/sister"
 - Present the Ayats you used, then explain what they mean in context, then give the conclusion
+- When referencing any Ayat, ALWAYS use this exact format: (Surah Name, Chapter:Verse) "verse text"
 - Keep the total response between 7-9 sentences
 - End with an encouraging closing thought`;
 }
