@@ -12,7 +12,7 @@ function searchQuran(query) {
   const keywords = query.toLowerCase()
     .replace(/[^\w\s]/g, '')
     .split(/\s+/)
-    .filter(w => w.length > 3 && !STOPWORDS.has(w));
+    .filter(w => w.length > 2 && !STOPWORDS.has(w));
 
   const results = [];
 
