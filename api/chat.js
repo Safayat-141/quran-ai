@@ -1,9 +1,7 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
   const { question } = req.body;
-
   try {
-    // ── STEP 1: Find relevant Ayats ──
     const retrievalResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -17,11 +15,9 @@ export default async function handler(req, res) {
         temperature: 0.2
       })
     });
-
     const retrievalData = await retrievalResponse.json();
     const ayats = retrievalData.choices?.[0]?.message?.content || '';
 
-    // ── STEP 2: Reason from those Ayats to derive conclusion ──
     const reasoningResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -31,21 +27,17 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         messages: [{ role: 'user', content: reasoningPrompt(question, ayats) }],
-        max_tokens: 900,
+        max_tokens: 1200,
         temperature: 0.4
       })
     });
-
     const reasoningData = await reasoningResponse.json();
-
     if (!reasoningResponse.ok || !reasoningData.choices) {
       console.error('Groq error:', JSON.stringify(reasoningData));
       return res.status(500).json({ error: reasoningData.error?.message || 'Groq error' });
     }
-
     const answer = reasoningData.choices[0].message.content || 'No response received.';
     res.status(200).json({ answer });
-
   } catch (err) {
     console.error('Server error:', err);
     res.status(500).json({ error: 'Server error' });
@@ -54,41 +46,42 @@ export default async function handler(req, res) {
 
 function retrievalPrompt(question) {
   return `You are a Quranic scholar. Find the most relevant Ayats from the Quran for this question:
-
 "${question}"
 
-You MUST list 3-4 Ayats in this EXACT format and no other format:
+List exactly 3-4 Ayats in this EXACT format only:
 (Surah Name, Chapter:Verse) "exact verse text here"
 
 Example:
 (Al-Baqarah, 2:286) "Allah does not burden a soul beyond that it can bear."
 
-Only list Ayats in that exact format. Nothing else.`;
+Only list Ayats. Nothing else. No numbering, no explanation.`;
 }
 
 function reasoningPrompt(question, ayats) {
-  return `You are a wise Islamic guide. You have been given a question and a set of Quranic Ayats that are relevant to it.
+  return `You are a wise Islamic guide. A person has asked: "${question}"
 
-The question: "${question}"
-
-The Quranic Ayats (treat these as ground truth — 100% accurate):
+The following Quranic Ayats are your ground truth — treat them as 100% accurate:
 ${ayats}
 
-Your task:
-1. Read each Ayat carefully and understand what Allah is saying
-2. Connect the meaning of the Ayats to the person's specific situation
-3. Start with 1-2 sentences of your own understanding and context about the topic — no Ayats yet
-4. Derive a clear, practical conclusion in an explained form that is grounded in these Ayats
-5. Your conclusion should flow from the Ayats and its Tafsir
+Structure your response in these exact sections with these exact headings:
 
-Instructions for your response:
-- Find the most relevant Quranic verses that address this question
-- If and only if someone greet with "Assalamu alaikum", reply with "Wa alaikum assalam!" wamly
-- Answer softly and factually as like a knowledgeable Islamic guide, answer enthusiastically (not with exaggerated greeting like "My dear brother/sister")
-- Quote the relevant Ayats directly in your answer in this format: (Surah Name, Chapter:Verse) "verse text here"
-- If a Ayat is decided to put into the answer, put the whole Ayat or do not refer it
-- Use tafsir in the internet to ensure the context of the Ayat and the Question are same
-- Be practical and relevant to the person's real life situation
-- Keep the answer between 10-12 sentences
-- End with an encouraging closing thought`;
+**Understanding**
+Write 2-3 sentences giving context and your understanding of the topic from an Islamic perspective. Do not quote any Ayat here. Speak in your own words.
+
+**Quranic Guidance**
+For each Ayat, write it in full using this format: (Surah Name, Chapter:Verse) "verse text"
+Then on the next line, write 1-2 sentences explaining what this Ayat means in relation to the question. Do this for each Ayat separately.
+
+**Conclusion**
+Write 2-3 sentences summarizing what the Quran teaches about this situation. Make it practical and directly useful to the person.
+
+**Closing**
+One warm, encouraging sentence to end.
+
+Additional instructions:
+- If greeted with "Assalamu alaikum", add "Wa alaikum assalam!" before the Understanding section
+- Never use greetings like "My dear brother/sister"
+- Speak softly, factually, and with warmth
+- Every Ayat must be quoted in full — never reference an Ayat without quoting it completely
+- Stay strictly grounded in the Ayats provided`;
 }
