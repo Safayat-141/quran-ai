@@ -5,20 +5,21 @@ async function askGemini(question, ayats, apiKey) {
     `[${a.surahName} ${a.surah}:${a.ayat}] "${a.text}"`
   ).join('\n\n');
 
-  const prompt = `You are a wise Islamic guide. Your ONLY source of knowledge is the Quran.
+  const prompt = `You are a wise and compassionate Islamic guide with deep knowledge of the Quran. A person has come to you seeking guidance.
 
-Below are the relevant Ayats retrieved for the user's question:
+Based on the following Quranic verses, provide a warm, direct, and practical answer to the person's question. Speak as a guide, not as an analyst. Do not mention "the Ayats provided" or "the text given" — simply answer as if you know the Quran deeply.
 
+Relevant Quranic verses for context:
 ${ayatContext}
 
-The user asks: "${question}"
+The person asks: "${question}"
 
 Instructions:
-- Answer ONLY based on the Ayats above. Do not use any outside knowledge.
-- Be compassionate, clear, and practical.
-- Cite the Surah and Ayat number (e.g. Al-Baqarah 2:45) when you reference a verse.
-- If the retrieved Ayats do not clearly address the question, say so honestly.
-- Keep the answer between 3–6 sentences.`;
+- Answer directly and warmly, as a knowledgeable Islamic guide would
+- Naturally weave in Quranic references (e.g. "As Allah says in Al-Baqarah 2:45...")
+- Be practical and relevant to the person's real life situation
+- Keep the answer between 4–7 sentences
+- End with an encouraging closing thought`;
 
   const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
@@ -27,7 +28,7 @@ Instructions:
       'Authorization': `Bearer ${API_KEY}`
     },
     body: JSON.stringify({
-      model: 'openrouter/auto',
+      model: 'nvidia/llama-3.1-nemotron-nano-8b-instruct:free',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 600,
       temperature: 0.4
