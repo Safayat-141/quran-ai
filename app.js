@@ -69,6 +69,8 @@
       if (ayats.length === 0) {
   // continue — let AI answer from its own knowledge
 }
+
+      const answer = await askGemini(question);
       typingEl.remove();
       appendAIMessage(answer, ayats);
 
