@@ -8,7 +8,7 @@
   const userInput    = document.getElementById('user-input');
   const sendBtn      = document.getElementById('send-btn');
 
-  let apiKey = localStorage.getItem('gemini_api_key') || '';
+  let apiKey = '';
 
   function showSetup() {
     setupScreen.classList.remove('hidden');
@@ -21,7 +21,7 @@
     loadQuran();
   }
 
-  apiKey ? showChat() : showSetup();
+  showChat();
 
   saveKeyBtn.addEventListener('click', () => {
     const key = apiKeyInput.value.trim();
