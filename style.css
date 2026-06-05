@@ -85,19 +85,18 @@ body {
 }
 
 header {
-  padding: 1rem 1.5rem;
+  padding: 2rem; /* Increased padding slightly for breathing room */
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Changed from space-between to center */
+  position: relative;     /* Allows any action buttons to sit on the sides if needed later */
 }
-.logo { color: var(--accent); font-size: 1.1rem; letter-spacing: 0.05em; }
-header button {
-  background: none;
-  border: none;
-  color: var(--muted);
-  font-size: 1.2rem;
-  cursor: pointer;
+.logo { 
+  color: var(--accent); 
+  font-size: 1.8rem;       /* Made it significantly bigger (was 1.1rem) */
+  font-weight: bold;       /* Optional: makes it stand out as a proper title */
+  letter-spacing: 0.05em; 
 }
 
 #chat-window {
