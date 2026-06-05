@@ -76,19 +76,13 @@ body {
 }
 
 header {
-  padding: 2rem; /* Increased padding slightly for breathing room */
+  padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  justify-content: center; /* Changed from space-between to center */
-  position: relative;     /* Allows any action buttons to sit on the sides if needed later */
+  justify-content: space-between;
 }
-.logo { 
-  color: var(--accent); 
-  font-size: 2.3rem;       /* Made it significantly bigger (was 1.1rem) */
-  font-weight: bold;       /* Optional: makes it stand out as a proper title */
-  letter-spacing: 0.05em; 
-}
+.logo { color: var(--accent); font-size: 1.1rem; letter-spacing: 0.05em; }
 header button {
   background: none;
   border: none;
