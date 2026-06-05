@@ -1,4 +1,4 @@
-const API_KEY = "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";
+const API_KEY = "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";
 
 async function askGemini(question, ayats, apiKey) {
   const ayatContext = ayats.map(a =>
@@ -27,7 +27,7 @@ Instructions:
       'Authorization': `Bearer ${API_KEY}`
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.0-flash-lite-001:free',
+      model: 'openrouter/auto',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 600,
       temperature: 0.4
