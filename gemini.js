@@ -27,7 +27,7 @@ Instructions:
       'Authorization': `Bearer ${API_KEY}`
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.0-flash-exp:free',
+      model: 'google/gemini-2.0-flash-lite-001:free',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 600,
       temperature: 0.4
