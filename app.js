@@ -67,21 +67,21 @@
       const ayats = searchQuran(question);
 
       if (ayats.length === 0) {
-        typingEl.remove();
-        appendAIMessage(
-          'I could not find directly relevant Ayats for this question in my current search. Please try rephrasing.',
-          []
-        );
-        return;
-      }
+  // continue — let AI answer from its own knowledge
+}
 
-      const answer = await askGemini(question, ayats, apiKey);
+      const answer = await askGemini(question, [], apiKey);
       typingEl.remove();
       appendAIMessage(answer, ayats);
 
-    } catch (err) {
-      typingEl.remove();
-      appendAIMessage(`Error: ${err.message}`, []);
+} catch (err) {
+  typingEl.remove();
+  try {
+    const fallback = await askGemini(question, [], apiKey);
+    appendAIMessage(fallback, []);
+  } catch {
+    appendAIMessage('Something went wrong. Please try again.', []);
+  }
     } finally {
       sendBtn.disabled = false;
     }
