@@ -1,4 +1,4 @@
-const API_KEY = "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";
+const API_KEY = "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";
 
 async function askGemini(question, ayats, apiKey) {
   const prompt = `You are a wise and compassionate Islamic guide with deep knowledge of the Quran.
