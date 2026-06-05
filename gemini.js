@@ -1,23 +1,14 @@
 const API_KEY = "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";
 
 async function askGemini(question, ayats, apiKey) {
-  const ayatContext = ayats.map(a =>
-    `[${a.surahName} ${a.surah}:${a.ayat}] "${a.text}"`
-  ).join('\n\n');
+  const prompt = `You are a wise and compassionate Islamic guide with deep knowledge of the Quran.
 
-  const prompt = `You are a wise and compassionate Islamic guide with deep knowledge of the Quran. A person has come to you seeking guidance.
-
-Based on the following Quranic verses, provide a warm, direct, and practical answer to the person's question. Speak as a guide, not as an analyst. Do not mention "the Ayats provided" or "the text given" — simply answer as if you know the Quran deeply.
-
-Relevant Quranic verses for context:
-${ayatContext}
-
-The person asks: "${question}"
+A person asks: "${question}"
 
 Instructions:
-- Answer directly and warmly, as a knowledgeable Islamic guide would
-- When referencing a verse, quote it directly in this format: "As Allah says in Al-Baqarah 2:45: '[actual verse text here]'"
-- Always include the full verse text when you cite it, not just the reference number
+- Find the most relevant Quranic verses that address this question
+- Answer warmly and directly as a knowledgeable Islamic guide
+- Quote the relevant Ayats directly in your answer in this format: (Surah Name, Chapter:Verse) "verse text here"
 - Be practical and relevant to the person's real life situation
 - Keep the answer between 4–7 sentences
 - End with an encouraging closing thought`;
@@ -31,7 +22,7 @@ Instructions:
     body: JSON.stringify({
       model: 'openrouter/auto',
       messages: [{ role: 'user', content: prompt }],
-      max_tokens: 600,
+      max_tokens: 800,
       temperature: 0.4
     })
   });
