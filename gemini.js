@@ -16,7 +16,8 @@ The person asks: "${question}"
 
 Instructions:
 - Answer directly and warmly, as a knowledgeable Islamic guide would
-- Naturally weave in Quranic references (e.g. "As Allah says in Al-Baqarah 2:45...")
+- When referencing a verse, quote it directly in this format: "As Allah says in Al-Baqarah 2:45: '[actual verse text here]'"
+- Always include the full verse text when you cite it, not just the reference number
 - Be practical and relevant to the person's real life situation
 - Keep the answer between 4–7 sentences
 - End with an encouraging closing thought`;
