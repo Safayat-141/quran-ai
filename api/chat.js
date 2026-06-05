@@ -18,6 +18,10 @@ export default async function handler(req, res) {
   });
 
   const data = await response.json();
+  if (!response.ok || !data.choices) {
+  console.error('OpenRouter error:', JSON.stringify(data));
+  return res.status(500).json({ error: data.error?.message || 'OpenRouter error' });
+}
   const answer = data.choices?.[0]?.message?.content || 'No response received.';
   res.status(200).json({ answer });
 }
