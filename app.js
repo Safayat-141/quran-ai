@@ -53,8 +53,10 @@
     // convert *italic*
     text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
     // convert Ayat references: (Surah, X:Y) "text" into styled quote blocks
-    text = text.replace(/\(([^)]+)\)\s*[""]([^"""]+)["""]/g,
-      '<span class="ayat-quote">($1) &ldquo;$2&rdquo;</span>');
+    text = text.replace(/\(([^)]+\d+:\d+[^)]*)\)\s*["""'"]([^"""'"]+)["""'"]/g,
+  '<span class="ayat-quote">($1) &ldquo;$2&rdquo;</span>');
+    text = text.replace(/\(([^)]+\d+:\d+[^)]*)\)/g,
+  '<strong style="color:var(--accent)">($1)</strong>');
     // wrap double newlines as paragraph breaks
     text = text.split(/\n\n+/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
     return text;
