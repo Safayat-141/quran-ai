@@ -10,7 +10,7 @@ export default async function handler(req, res) {
       'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.0-flash-exp:free',
+      model: 'mistralai/mistral-7b-instruct:free',
       messages: [{ role: 'user', content: buildPrompt(question) }],
       max_tokens: 800,
       temperature: 0.4
