@@ -105,5 +105,5 @@ RESPONSE FORMAT (only if not declined):
 - Flow into a practical conclusion drawn from the Ayats
 - End with one warm encouraging sentence
 - Then the disclaimer on its own line
-- Total: 10-12 sentences`;
+- Total: 9-11 sentences`;
 }
