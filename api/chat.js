@@ -3,8 +3,8 @@ export default async function handler(req, res) {
   const { question } = req.body;
 
   try {
-    // ── STEP 1: Get relevant Surah:Verse references from Groq ──
-    const refResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    // ── STEP 1: Scope check + Ayat retrieval ──
+    const retrievalResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -12,71 +12,16 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: referencePrompt(question) }],
-        max_tokens: 200,
+        messages: [{ role: 'user', content: retrievalPrompt(question) }],
+        max_tokens: 600,
         temperature: 0.2
       })
     });
 
-    const refData = await refResponse.json();
-    const refText = refData.choices?.[0]?.message?.content?.trim() || '';
+    const retrievalData = await retrievalResponse.json();
+    const ayats = retrievalData.choices?.[0]?.message?.content || '';
 
-    // Handle out-of-scope
-    if (refText === 'DECLINE') {
-      return res.status(200).json({
-        answer: "I'm only able to offer guidance from the Holy Quran. For worldly knowledge, please use a general search engine. Is there something spiritual I can help you with?"
-      });
-    }
-
-    // ── STEP 2: Parse references e.g. "2:286, 3:159, 25:68" ──
-    const references = refText
-      .split(',')
-      .map(r => r.trim())
-      .filter(r => /^\d+:\d+$/.test(r))
-      .slice(0, 4);
-
-    if (references.length === 0) {
-      return res.status(200).json({
-        answer: "I couldn't find directly relevant verses for your question. Could you rephrase it?"
-      });
-    }
-
-    // ── STEP 3: Fetch exact verified text from alquran.cloud ──
-    const ayatResults = await Promise.all(
-      references.map(async (ref) => {
-        try {
-          const r = await fetch(
-            `https://api.alquran.cloud/v1/ayah/${ref}/editions/quran-uthmani,en.asad`
-          );
-          const d = await res.json();
-          if (d.code !== 200) return null;
-          const [arabic, english] = d.data;
-          return {
-            ref,
-            surahName: english.surah.englishName,
-            arabic: arabic.text,
-            english: english.text
-          };
-        } catch {
-          return null;
-        }
-      })
-    );
-
-    const validAyats = ayatResults.filter(Boolean);
-
-    if (validAyats.length === 0) {
-      return res.status(200).json({
-        answer: "I couldn't retrieve the verses at this moment. Please try again."
-      });
-    }
-
-    // ── STEP 4: Format verified Ayats for the prompt ──
-    const ayatContext = validAyats.map(a =>
-      `(${a.surahName}, ${a.ref}) "${a.english}"`
-    ).join('\n\n');
-
-    // ── STEP 5: Groq reasons from verified Ayats ──
+    // ── STEP 2: Reason from Ayats ──
     const reasoningResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -85,7 +30,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: reasoningPrompt(question, ayatContext) }],
+        messages: [{ role: 'user', content: reasoningPrompt(question, ayats) }],
         max_tokens: 1200,
         temperature: 0.4
       })
@@ -107,23 +52,27 @@ export default async function handler(req, res) {
   }
 }
 
-function referencePrompt(question) {
-  return `You are a Quranic scholar. Your task has two parts:
-
-1. Determine if this question is within scope: spiritual guidance, faith, personal struggles, ethics, relationships, emotions, life challenges.
-
-2. If OUT OF SCOPE (geography, sports, coding, math, science, general trivia) — respond with exactly: DECLINE
-
-If IN SCOPE — respond with only the most relevant Surah:Verse references, comma-separated, like this:
-5:32, 17:33, 25:68
+function retrievalPrompt(question) {
+  return `You are a Quranic scholar. Determine if the following question is within the scope of spiritual guidance, faith, personal struggles, ethics, relationships, emotions, or life challenges.
 
 Question: "${question}"
 
-Rules:
-- Return ONLY the reference numbers or DECLINE
-- No text, no explanation, no Ayat text
-- Maximum 4 references
-- Only include references you are highly confident are directly relevant`;
+If the question is OUT OF SCOPE (e.g. geography, sports, coding, math, science facts, general trivia), respond with exactly one word: DECLINE
+
+If the question IS within scope, list exactly 2-3 relevant Ayats in this EXACT format only:
+(Surah Name, Chapter:Verse) "exact verse text here"
+
+CRITICAL RULES for listing Ayats:
+- Only cite an Ayat if you can quote its COMPLETE and FULL text
+- If you are uncertain about the full text of a verse, do NOT include it
+- Never truncate a verse — if you cannot recall it fully, skip it and choose another
+- Prefer shorter, well-known verses that you can quote with full confidence
+- Quality over quantity — 2 accurate complete verses is better than 4 with one truncated
+
+Example:
+(Al-Baqarah, 2:286) "Allah does not burden a soul beyond that it can bear."
+
+Only list Ayats or the word DECLINE. Nothing else.`;
 }
 
 function reasoningPrompt(question, ayats) {
