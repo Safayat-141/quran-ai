@@ -59,7 +59,7 @@ Question: "${question}"
 
 If the question is OUT OF SCOPE (e.g. geography, sports, coding, math, science facts, general trivia), respond with exactly one word: DECLINE
 
-If the question IS within scope, list exactly 3-4 relevant Ayats in this EXACT format only:
+If the question IS within scope, list exactly 2-3 relevant Ayats in this EXACT format only:
 (Surah Name, Chapter:Verse) "exact verse text here"
 
 CRITICAL RULES for listing Ayats:
@@ -67,7 +67,7 @@ CRITICAL RULES for listing Ayats:
 - If you are uncertain about the full text of a verse, do NOT include it
 - Never truncate a verse — if you cannot recall it fully, skip it and choose another
 - Prefer shorter, well-known verses that you can quote with full confidence
-- Quality over quantity — 3 accurate complete verses is better than 4 with one truncated
+- Quality over quantity — 2 accurate complete verses is better than 4 with one truncated
 
 Example:
 (Al-Baqarah, 2:286) "Allah does not burden a soul beyond that it can bear."
