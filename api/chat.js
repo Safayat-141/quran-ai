@@ -102,6 +102,5 @@ RESPONSE FORMAT (only if not declined):
 - Introduce each Ayat naturally in full using: (Surah Name, Chapter:Verse) "verse text" — then 1-2 sentences on what it means for this situation
 - Flow into a practical conclusion drawn from the Ayats
 - End with one warm encouraging sentence
-- Then the disclaimer on its own line
 - Total: 9-11 sentences`;
 }
