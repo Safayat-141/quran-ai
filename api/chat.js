@@ -4,14 +4,14 @@ export default async function handler(req, res) {
 
   try {
     // ── STEP 1: Scope check + Ayat retrieval ──
-    const retrievalResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const retrievalResponse = await fetch('https://api.cerebras.ai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
+        'Authorization': `Bearer ${process.env.CEREBRAS_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'llama-3.3-70b',
         messages: [{ role: 'user', content: retrievalPrompt(question) }],
         max_tokens: 600,
         temperature: 0.2
@@ -22,14 +22,14 @@ export default async function handler(req, res) {
     const ayats = retrievalData.choices?.[0]?.message?.content || '';
 
     // ── STEP 2: Reason from Ayats ──
-    const reasoningResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const reasoningResponse = await fetch('https://api.cerebras.ai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
+        'Authorization': `Bearer ${process.env.CEREBRAS_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'llama-3.3-70b',
         messages: [{ role: 'user', content: reasoningPrompt(question, ayats) }],
         max_tokens: 1200,
         temperature: 0.4
@@ -39,8 +39,8 @@ export default async function handler(req, res) {
     const reasoningData = await reasoningResponse.json();
 
     if (!reasoningResponse.ok || !reasoningData.choices) {
-      console.error('Groq error:', JSON.stringify(reasoningData));
-      return res.status(500).json({ error: reasoningData.error?.message || 'Groq error' });
+      console.error('Cerebras error:', JSON.stringify(reasoningData));
+      return res.status(500).json({ error: reasoningData.error?.message || 'Cerebras error' });
     }
 
     const answer = reasoningData.choices[0].message.content || 'No response received.';
