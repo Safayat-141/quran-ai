@@ -1,13 +1,13 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --ink: #111111;
-  --teal: #25a866;
-  --sand: #ffffff;
-  --paper: #ffffff;
-  --mist: #f2f2f2;
-  --line: #d6d6d6;
-  --muted: #626262;
+  --ink: #102a43;
+  --teal: #168c8c;
+  --sand: #f1c36b;
+  --paper: rgba(255, 255, 255, 0.82);
+  --mist: #eef5f3;
+  --line: rgba(16, 42, 67, 0.14);
+  --muted: #5b7083;
   --radius: 18px;
   --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --display-font: Georgia, "Times New Roman", serif;
@@ -106,12 +106,15 @@ html[data-theme="dark"] #user-input { background: #14334b; }
 html[data-theme="dark"] .prompt-chip { background: #173b52; color: var(--ink); }
 
 header {
-  padding: 1.35rem clamp(1.25rem, 5vw, 4.5rem) 1.15rem;
+  padding: 1.25rem clamp(1.25rem, 5vw, 4.5rem) 1.1rem;
   border-bottom: 1px solid var(--line);
   flex-shrink: 0;
-  background: transparent;
+  background: rgba(255,255,255,0.32);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
-.brand-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.brand-row { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; }
+.brand-lockup { min-width: 0; }
 .header-actions { display: flex; align-items: center; gap: 0.5rem; }
 .theme-icon { font-size: 1rem; line-height: 1; }
 .logo { display: flex; align-items: center; gap: 0.65rem; font-size: 1.35rem; font-weight: 800; letter-spacing: -0.04em; }
@@ -123,7 +126,8 @@ header {
 .status-dot { width: 0.48rem; height: 0.48rem; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 4px rgba(22, 140, 140, 0.13); }
 
 /* Conversation */
-#chat-window { flex: 1; overflow-y: auto; padding: clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 10vw, 8rem); display: flex; flex-direction: column; gap: 1.25rem; min-height: 0; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+#chat-window { flex: 1; overflow-y: auto; padding: clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 10vw, 8rem); display: flex; flex-direction: column; gap: 1.25rem; min-height: 0; scrollbar-width: thin; scrollbar-color: var(--line) transparent; scroll-behavior: smooth; }
+#chat-window:focus-visible { outline: 3px solid rgba(22, 140, 140, 0.3); outline-offset: -3px; }
 #chat-window::-webkit-scrollbar { width: 5px; }
 #chat-window::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
 .welcome-msg { width: min(100%, 680px); text-align: center; margin: auto auto 1.5rem; padding: clamp(1.5rem, 4vw, 2.6rem); border: 1px solid var(--line); border-radius: 24px; background: rgba(237, 247, 244, 0.16); box-shadow: 0 18px 50px rgba(16, 42, 67, 0.08); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); display: flex; flex-direction: column; align-items: center; gap: 0.8rem; }
@@ -140,7 +144,9 @@ header {
 .msg.ai { align-self: flex-start; }
 .bubble { padding: 1rem 1.2rem; border-radius: var(--radius); line-height: 1.75; font-size: 0.95rem; }
 .msg.user .bubble { background: var(--ink); color: white; border-bottom-right-radius: 5px; box-shadow: 0 8px 20px rgba(16, 42, 67, 0.12); }
-.msg.ai .bubble { background: white; border: 1px solid var(--line); border-bottom-left-radius: 5px; box-shadow: 0 5px 16px rgba(16, 42, 67, 0.05); }
+.msg.ai .bubble { background: var(--paper); border: 1px solid var(--line); border-bottom-left-radius: 5px; box-shadow: 0 8px 24px rgba(16, 42, 67, 0.07); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.msg { animation: message-in 280ms ease-out both; }
+@keyframes message-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .msg.ai .bubble p { margin-bottom: 0.75rem; }
 .msg.ai .bubble p:last-child { margin-bottom: 0; }
 .ayat-quote { display: block; border-left: 3px solid var(--sand); margin: 0.75rem 0; padding: 0.5rem 0.75rem; color: var(--teal); font-style: italic; background: var(--mist); border-radius: 0 6px 6px 0; }
@@ -169,7 +175,10 @@ header {
   header { padding: 1rem 0.9rem 0.8rem; }
   .logo { font-size: 1.18rem; }
   .tagline { font-size: 0.78rem; }
-  .ghost-btn { font-size: 0.75rem; }
+  .status { display: none; }
+  .header-actions { gap: 0.35rem; }
+  .ghost-btn { font-size: 0.75rem; padding: 0.45rem 0.7rem; }
+  .theme-label { display: none; }
   #chat-window { padding: 1rem 0.8rem; }
   .welcome-msg { padding: 1.35rem 1rem; border-radius: 18px; }
   .welcome-title { font-size: 1.55rem; }
