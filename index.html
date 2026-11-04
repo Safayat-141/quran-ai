@@ -14,20 +14,33 @@
 
   <div id="chat-screen">
     <header>
-      <div class="logo">☪ Quran AI</div>
-      <div class="tagline">Timeless guidance from the Holy Quran</div>
+      <div class="brand-row">
+        <div class="logo"><span class="logo-mark">☪</span><span>Quran AI</span></div>
+        <button id="clear-btn" class="ghost-btn" type="button" aria-label="Clear conversation">Clear chat</button>
+      </div>
+      <div class="tagline">A calm space for reflection and Quran-based guidance</div>
+      <div class="status"><span class="status-dot"></span> Grounded in the Holy Quran</div>
     </header>
 
-    <div id="chat-window">
+    <div id="chat-window" aria-live="polite">
       <div class="welcome-msg">
-        <p>Assalamu Alaikum — Welcome to Quran AI</p>
-        <p>Ask your questions and receive guidance derived solely from the Holy Book Al-Quran.</p>
+        <span class="eyebrow">Assalamu Alaikum</span>
+        <p class="welcome-title">What would you like to reflect on?</p>
+        <p>Ask a question and receive thoughtful guidance derived solely from the Holy Quran.</p>
+        <div class="prompt-grid" aria-label="Suggested questions">
+          <button class="prompt-chip" type="button" data-prompt="What does the Quran say about patience?">Finding patience</button>
+          <button class="prompt-chip" type="button" data-prompt="How can I find peace according to the Quran?">Finding peace</button>
+          <button class="prompt-chip" type="button" data-prompt="What guidance does the Quran offer for difficult times?">Difficult times</button>
+        </div>
       </div>
     </div>
 
     <div id="input-area">
-      <textarea id="user-input" placeholder="Ask your question..." rows="1"></textarea>
-      <button id="send-btn">Send</button>
+      <div class="composer">
+        <textarea id="user-input" aria-label="Your question" placeholder="Ask your question..." rows="1"></textarea>
+        <span class="composer-hint">Enter to send · Shift + Enter for a new line</span>
+      </div>
+      <button id="send-btn" type="button"><span>Send</span><span aria-hidden="true">↗</span></button>
     </div>
   </div>
 

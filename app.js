@@ -11,13 +11,28 @@
   });
 
   userInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent?.isComposing && e.keyCode !== 229) {
       e.preventDefault();
       handleSend();
     }
   });
 
   sendBtn.addEventListener('click', handleSend);
+  document.querySelectorAll('.prompt-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      userInput.value = chip.dataset.prompt;
+      userInput.dispatchEvent(new Event('input'));
+      userInput.focus();
+    });
+  });
+  document.getElementById('clear-btn').addEventListener('click', () => {
+    chatWindow.innerHTML = `<div class="welcome-msg"><span class="eyebrow">Conversation cleared</span><p class="welcome-title">What would you like to reflect on?</p><p>Choose a prompt below or ask your own question.</p><div class="prompt-grid" aria-label="Suggested questions"><button class="prompt-chip" type="button" data-prompt="What does the Quran say about patience?">Finding patience</button><button class="prompt-chip" type="button" data-prompt="How can I find peace according to the Quran?">Finding peace</button></div></div>`;
+    chatWindow.querySelectorAll('.prompt-chip').forEach(chip => chip.addEventListener('click', () => {
+      userInput.value = chip.dataset.prompt;
+      userInput.dispatchEvent(new Event('input'));
+      userInput.focus();
+    }));
+  });
 
   async function handleSend() {
     const question = userInput.value.trim();
