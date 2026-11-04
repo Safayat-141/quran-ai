@@ -29,6 +29,20 @@ button { -webkit-tap-highlight-color: transparent; }
 }
 
 /* Header */
+html[data-theme="dark"] {
+  --ink: #edf7f4;
+  --paper: #102a43;
+  --mist: #173b52;
+  --line: #35606d;
+  --muted: #b4cfcc;
+}
+html[data-theme="dark"] body { background: #0b2033; }
+html[data-theme="dark"] #chat-screen { box-shadow: 0 0 90px rgba(0, 0, 0, 0.3); }
+html[data-theme="dark"] .welcome-msg,
+html[data-theme="dark"] .msg.ai .bubble,
+html[data-theme="dark"] #user-input { background: #14334b; }
+html[data-theme="dark"] .prompt-chip { background: #173b52; color: var(--ink); }
+
 header {
   padding: 1.35rem clamp(1.25rem, 5vw, 4.5rem) 1.15rem;
   border-bottom: 1px solid var(--line);
@@ -36,6 +50,8 @@ header {
   background: var(--paper);
 }
 .brand-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.header-actions { display: flex; align-items: center; gap: 0.5rem; }
+.theme-icon { font-size: 1rem; line-height: 1; }
 .logo { display: flex; align-items: center; gap: 0.65rem; font-size: 1.35rem; font-weight: 800; letter-spacing: -0.04em; }
 .logo-mark { display: grid; place-items: center; width: 2.15rem; height: 2.15rem; border-radius: 11px; color: var(--ink); background: var(--sand); font-size: 1.15rem; box-shadow: 0 5px 12px rgba(241, 195, 107, 0.25); }
 .ghost-btn { border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 999px; padding: 0.5rem 0.9rem; cursor: pointer; transition: 0.2s ease; }

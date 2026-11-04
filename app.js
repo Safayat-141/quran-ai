@@ -5,6 +5,25 @@
 
   loadQuran();
 
+  const themeBtn = document.getElementById('theme-btn');
+  const savedTheme = localStorage.getItem('quran-ai-theme');
+  if (savedTheme === 'dark') document.documentElement.dataset.theme = 'dark';
+  updateThemeButton();
+  themeBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    document.documentElement.dataset.theme = isDark ? 'light' : 'dark';
+    localStorage.setItem('quran-ai-theme', isDark ? 'light' : 'dark');
+    updateThemeButton();
+  });
+
+  function updateThemeButton() {
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    themeBtn.setAttribute('aria-pressed', String(isDark));
+    themeBtn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    themeBtn.querySelector('.theme-label').textContent = isDark ? 'Light mode' : 'Dark mode';
+    themeBtn.querySelector('.theme-icon').textContent = isDark ? '○' : '◐';
+  }
+
   userInput.addEventListener('input', () => {
     userInput.style.height = 'auto';
     userInput.style.height = userInput.scrollHeight + 'px';
