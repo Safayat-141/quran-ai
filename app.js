@@ -54,8 +54,9 @@
       try {
         const fallback = await askGemini(question);
         appendAIMessage(fallback);
-      } catch {
-        appendAIMessage('Something went wrong. Please try again.');
+      } catch (finalErr) {
+        console.error('[v0] Chat request failed:', finalErr);
+        appendAIMessage(finalErr.message || 'The chat service is temporarily unavailable. Please try again.');
       }
     } finally {
       sendBtn.disabled = false;

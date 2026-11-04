@@ -19,7 +19,11 @@ export default async function handler(req, res) {
     });
 
     const retrievalData = await retrievalResponse.json();
-    const ayats = retrievalData.choices?.[0]?.message?.content || '';
+    if (!retrievalResponse.ok || !retrievalData.choices?.[0]?.message?.content) {
+      console.error('Cerebras retrieval error:', JSON.stringify(retrievalData));
+      return res.status(502).json({ error: retrievalData.error?.message || 'The Quran search service is unavailable.' });
+    }
+    const ayats = retrievalData.choices[0].message.content;
 
     // ── STEP 2: Reason from Ayats ──
     const reasoningResponse = await fetch('https://api.cerebras.ai/v1/chat/completions', {
