@@ -13,7 +13,23 @@
 }
 
 html, body { min-height: 100%; color: var(--ink); font-family: var(--font); }
-body { background: var(--mist); }
+body {
+  background:
+    radial-gradient(circle at 10% 8%, rgba(241, 195, 107, 0.24), transparent 28rem),
+    radial-gradient(circle at 92% 88%, rgba(22, 140, 140, 0.2), transparent 30rem),
+    var(--mist);
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.38;
+  background-image: linear-gradient(rgba(16, 42, 67, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 42, 67, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to bottom, black, transparent 80%);
+}
+
 button, textarea { font: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
 
@@ -36,7 +52,16 @@ html[data-theme="dark"] {
   --line: #35606d;
   --muted: #b4cfcc;
 }
-html[data-theme="dark"] body { background: #0b2033; }
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 8% 10%, rgba(241, 195, 107, 0.12), transparent 25rem),
+    radial-gradient(circle at 94% 86%, rgba(22, 140, 140, 0.16), transparent 28rem),
+    #0b2033;
+}
+html[data-theme="dark"] body::before {
+  opacity: 0.24;
+  background-image: linear-gradient(rgba(237, 247, 244, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(237, 247, 244, 0.035) 1px, transparent 1px);
+}
 html[data-theme="dark"] #chat-screen { box-shadow: 0 0 90px rgba(0, 0, 0, 0.3); }
 html[data-theme="dark"] .welcome-msg,
 html[data-theme="dark"] .msg.ai .bubble,
