@@ -1,54 +1,56 @@
+const CEREBRAS_URL = 'https://api.cerebras.ai/v1/chat/completions';
+// llama-3.3-70b was deprecated by Cerebras on 2026-02-16. Override via env var if needed.
+const MODEL = process.env.CEREBRAS_MODEL || 'gpt-oss-120b';
+
+async function callCerebras(prompt, { maxTokens, temperature }) {
+  const response = await fetch(CEREBRAS_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.CEREBRAS_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      messages: [{ role: 'user', content: prompt }],
+      // max_tokens includes hidden reasoning tokens on gpt-oss-120b, so leave headroom
+      max_tokens: maxTokens,
+      reasoning_effort: 'low',
+      temperature
+    })
+  });
+  const data = await response.json().catch(() => ({}));
+  // Cerebras errors can be top-level ({message, type, code}) or nested ({error:{message}})
+  const apiError = data?.error?.message || data?.message;
+  const content = data?.choices?.[0]?.message?.content;
+  return { ok: response.ok, status: response.status, data, apiError, content };
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
-  const { question } = req.body;
+  if (!process.env.CEREBRAS_API_KEY) {
+    console.error('CEREBRAS_API_KEY is not set');
+    return res.status(500).json({ error: 'Server is missing its API key configuration.' });
+  }
+  const question = typeof req.body?.question === 'string' ? req.body.question.trim() : '';
+  if (!question) return res.status(400).json({ error: 'Please enter a question.' });
 
   try {
     // ── STEP 1: Scope check + Ayat retrieval ──
-    const retrievalResponse = await fetch('https://api.cerebras.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.CEREBRAS_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b',
-        messages: [{ role: 'user', content: retrievalPrompt(question) }],
-        max_tokens: 600,
-        temperature: 0.2
-      })
-    });
-
-    const retrievalData = await retrievalResponse.json();
-    if (!retrievalResponse.ok || !retrievalData.choices?.[0]?.message?.content) {
-      console.error('Cerebras retrieval error:', JSON.stringify(retrievalData));
-      return res.status(502).json({ error: retrievalData.error?.message || 'The Quran search service is unavailable.' });
+    const retrieval = await callCerebras(retrievalPrompt(question), { maxTokens: 2000, temperature: 0.2 });
+    if (!retrieval.ok || !retrieval.content) {
+      console.error('Cerebras retrieval error:', retrieval.status, JSON.stringify(retrieval.data));
+      return res.status(502).json({ error: 'The Quran search service is unavailable.' });
     }
-    const ayats = retrievalData.choices[0].message.content;
+    const ayats = retrieval.content;
 
     // ── STEP 2: Reason from Ayats ──
-    const reasoningResponse = await fetch('https://api.cerebras.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.CEREBRAS_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b',
-        messages: [{ role: 'user', content: reasoningPrompt(question, ayats) }],
-        max_tokens: 1200,
-        temperature: 0.4
-      })
-    });
-
-    const reasoningData = await reasoningResponse.json();
-
-    if (!reasoningResponse.ok || !reasoningData.choices) {
-      console.error('Cerebras error:', JSON.stringify(reasoningData));
-      return res.status(500).json({ error: reasoningData.error?.message || 'Cerebras error' });
+    const reasoning = await callCerebras(reasoningPrompt(question, ayats), { maxTokens: 3000, temperature: 0.4 });
+    if (!reasoning.ok || !reasoning.content) {
+      console.error('Cerebras reasoning error:', reasoning.status, JSON.stringify(reasoning.data));
+      return res.status(502).json({ error: 'Could not generate a response right now. Please try again.' });
     }
 
-    const answer = reasoningData.choices[0].message.content || 'No response received.';
-    res.status(200).json({ answer });
+    res.status(200).json({ answer: reasoning.content });
 
   } catch (err) {
     console.error('Server error:', err);
