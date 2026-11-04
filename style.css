@@ -13,11 +13,29 @@
 }
 
 html, body { min-height: 100%; color: var(--ink); font-family: var(--font); }
-body { background: var(--mist); }
+body {
+  background:
+    radial-gradient(circle at 10% 8%, rgba(241, 195, 107, 0.24), transparent 28rem),
+    radial-gradient(circle at 92% 88%, rgba(22, 140, 140, 0.2), transparent 30rem),
+    var(--mist);
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.38;
+  background-image: linear-gradient(rgba(16, 42, 67, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 42, 67, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to bottom, black, transparent 80%);
+}
+
 button, textarea { font: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
 
 #chat-screen {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -28,6 +46,38 @@ button { -webkit-tap-highlight-color: transparent; }
   box-shadow: 0 0 90px rgba(16, 42, 67, 0.12);
 }
 
+/* Interactive background */
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  width: 34rem;
+  height: 34rem;
+  left: var(--pointer-x, 50%);
+  top: var(--pointer-y, 35%);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(22, 140, 140, 0.16), rgba(241, 195, 107, 0.06) 36%, transparent 70%);
+  filter: blur(12px);
+  transition: left 0.35s ease-out, top 0.35s ease-out;
+}
+.background-ripple {
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+  border: 1px solid rgba(22, 140, 140, 0.42);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: background-ripple 1s ease-out forwards;
+}
+@keyframes background-ripple {
+  from { width: 1px; height: 1px; opacity: 0.7; }
+  to { width: 24rem; height: 24rem; opacity: 0; }
+}
+
 /* Header */
 html[data-theme="dark"] {
   --ink: #edf7f4;
@@ -36,7 +86,16 @@ html[data-theme="dark"] {
   --line: #35606d;
   --muted: #b4cfcc;
 }
-html[data-theme="dark"] body { background: #0b2033; }
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 8% 10%, rgba(241, 195, 107, 0.12), transparent 25rem),
+    radial-gradient(circle at 94% 86%, rgba(22, 140, 140, 0.16), transparent 28rem),
+    #0b2033;
+}
+html[data-theme="dark"] body::before {
+  opacity: 0.24;
+  background-image: linear-gradient(rgba(237, 247, 244, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(237, 247, 244, 0.035) 1px, transparent 1px);
+}
 html[data-theme="dark"] #chat-screen { box-shadow: 0 0 90px rgba(0, 0, 0, 0.3); }
 html[data-theme="dark"] .welcome-msg,
 html[data-theme="dark"] .msg.ai .bubble,

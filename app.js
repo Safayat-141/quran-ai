@@ -5,6 +5,26 @@
 
   loadQuran();
 
+  const pointerRoot = document.documentElement;
+  let pointerFrame;
+  document.addEventListener('pointermove', event => {
+    if (pointerFrame) cancelAnimationFrame(pointerFrame);
+    pointerFrame = requestAnimationFrame(() => {
+      pointerRoot.style.setProperty('--pointer-x', `${event.clientX}px`);
+      pointerRoot.style.setProperty('--pointer-y', `${event.clientY}px`);
+    });
+  }, { passive: true });
+
+  document.addEventListener('pointerdown', event => {
+    if (event.target.closest('button, textarea, a')) return;
+    const ripple = document.createElement('span');
+    ripple.className = 'background-ripple';
+    ripple.style.left = `${event.clientX}px`;
+    ripple.style.top = `${event.clientY}px`;
+    document.body.appendChild(ripple);
+    ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
+  }, { passive: true });
+
   const themeBtn = document.getElementById('theme-btn');
   const savedTheme = localStorage.getItem('quran-ai-theme');
   if (savedTheme === 'dark') document.documentElement.dataset.theme = 'dark';
