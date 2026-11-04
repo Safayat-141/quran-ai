@@ -49,6 +49,56 @@ button { -webkit-tap-highlight-color: transparent; }
   background: transparent;
 }
 
+/* Ambient calligraphy and light trails */
+.ambient-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.68;
+}
+.calligraphy-fragment {
+  position: absolute;
+  color: rgba(22, 140, 140, 0.16);
+  font-family: "Noto Naskh Arabic", "Amiri", Georgia, serif;
+  font-size: clamp(2.2rem, 5vw, 5rem);
+  font-weight: 700;
+  white-space: nowrap;
+  filter: blur(0.2px);
+  user-select: none;
+  animation: calligraphy-drift 18s ease-in-out infinite alternate;
+}
+.fragment-one { top: 17%; left: 8%; transform: rotate(-12deg); animation-delay: -4s; }
+.fragment-two { top: 31%; right: 10%; color: rgba(241, 195, 107, 0.2); transform: rotate(10deg); animation-delay: -10s; }
+.fragment-three { bottom: 18%; left: 17%; font-size: clamp(1.8rem, 4vw, 4rem); transform: rotate(7deg); animation-delay: -13s; }
+.fragment-four { bottom: 28%; right: 6%; color: rgba(22, 140, 140, 0.12); transform: rotate(-8deg); animation-delay: -1s; }
+.light-trail {
+  position: absolute;
+  width: 42rem;
+  height: 10rem;
+  border-radius: 50%;
+  border-top: 1px solid rgba(22, 140, 140, 0.28);
+  border-bottom: 1px solid rgba(241, 195, 107, 0.15);
+  filter: blur(3px);
+  opacity: 0.7;
+  transform: rotate(-18deg);
+  animation: trail-float 16s ease-in-out infinite alternate;
+}
+.trail-one { top: 12%; right: -13rem; }
+.trail-two { bottom: 12%; left: -16rem; transform: rotate(21deg); animation-delay: -7s; }
+@keyframes calligraphy-drift {
+  from { margin-top: -0.5rem; opacity: 0.45; }
+  to { margin-top: 1.25rem; opacity: 0.85; }
+}
+@keyframes trail-float {
+  from { margin-left: -1.5rem; opacity: 0.3; }
+  to { margin-left: 1.5rem; opacity: 0.75; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .calligraphy-fragment, .light-trail { animation: none; }
+}
+
 /* Interactive background */
 body::after {
   content: "";
