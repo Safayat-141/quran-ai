@@ -155,7 +155,9 @@ header {
 #user-input { width: 100%; background: white; border: 1px solid var(--line); border-radius: 15px; color: var(--ink); font-size: 0.95rem; padding: 0.85rem 1rem; resize: none; outline: none; max-height: 150px; overflow-y: auto; scrollbar-width: none; transition: 0.2s ease; }
 #user-input::-webkit-scrollbar { display: none; }
 #user-input:focus { border-color: var(--teal); box-shadow: 0 0 0 4px rgba(22, 140, 140, 0.12); }
-.composer-hint { display: block; color: var(--muted); font-size: 0.68rem; margin: 0.35rem 0 0 0.3rem; }
+#character-count { color: var(--muted); font-variant-numeric: tabular-nums; transition: color 180ms ease; }
+#character-count.is-near-limit { color: var(--sand); }
+.composer-hint { display: flex; justify-content: space-between; gap: 1rem; color: var(--muted); font-size: 0.68rem; margin: 0.35rem 0 0 0.3rem; }
 #send-btn { display: flex; align-items: center; gap: 0.55rem; background: var(--teal); color: white; border: none; border-radius: 14px; padding: 0.88rem 1.05rem; cursor: pointer; font-weight: 800; white-space: nowrap; transition: 0.2s ease; }
 #send-btn:hover, #send-btn:focus-visible { background: var(--ink); transform: translateY(-1px); outline: none; }
 #send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
