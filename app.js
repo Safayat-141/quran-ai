@@ -44,9 +44,21 @@
     themeBtn.querySelector('.theme-icon').textContent = isDark ? '○' : '◐';
   }
 
-  userInput.addEventListener('input', () => {
+  const characterCount = document.getElementById('character-count');
+  const updateComposer = () => {
     userInput.style.height = 'auto';
-    userInput.style.height = userInput.scrollHeight + 'px';
+    userInput.style.height = Math.min(userInput.scrollHeight, 150) + 'px';
+    characterCount.textContent = `${userInput.value.length} / 500`;
+    characterCount.classList.toggle('is-near-limit', userInput.value.length > 440);
+  };
+
+  userInput.addEventListener('input', updateComposer);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement !== userInput && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      e.preventDefault();
+      userInput.focus();
+    }
   });
 
   userInput.addEventListener('keydown', e => {
